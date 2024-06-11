@@ -1,4 +1,39 @@
+// Dibuat Oleh Purwati Ayu Utami (2357051007)
+
 #include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+
 using namespace std;
-int main(){
-}
+
+struct User {
+    string username; 
+    string password; 
+};
+
+class UserManager {
+private:
+    vector<User> users; 
+
+public:
+    void registerUser() {
+        User newUser; 
+        cout << "Masukkan nama pengguna: ";
+        cin >> newUser.username; 
+        cout << "Masukkan kata sandi: ";
+        cin >> newUser.password; 
+        users.push_back(newUser); 
+        cout << "Registrasi berhasil!\n"; 
+    }
+
+    bool loginUser(string username, string password) {
+        for (const auto& user : users) {
+            if (user.username == username && user.password == password) {
+                return true; 
+            }
+        }
+        return false; 
+    }
+};
+
