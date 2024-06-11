@@ -135,3 +135,97 @@ public:
         cout << "Barcode: " << barcode << endl;
     }
 };
+
+
+//Dikerjakan oleh Allisya Syakdari (2317051017)
+
+int main() {
+    UserManager userManager;
+    MovieManager movieManager;
+
+    movieManager.movies.push_back({"Conjuring", "13:50", 50000});
+    movieManager.movies.push_back({"IT", "14:30", 45000});
+    movieManager.movies.push_back({"Identity", "17.45", 40000});
+
+    Theater theater(50);
+    TicketQueue ticketQueue;
+
+    bool loggedIn = false;
+    while (!loggedIn) {
+        cout<<" Bioskop TIM 1"<<endl;
+        cout<<" Ilmu Komputer"<<endl;
+        cout<<"================"<<endl;
+        cout<<"* DAFTAR MENU *"<<endl;
+        cout<<"================"<<endl;
+        cout<<"1. Registrasi\n2. Login\n3. Keluar\nPilihan: ";
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                userManager.registerUser();
+                break;
+            case 2: {
+                string username, password;
+                cout << "Masukkan nama pengguna: ";
+                cin >> username;
+                cout << "Masukkan kata sandi: ";
+                cin >> password;
+                if (userManager.loginUser(username, password)) {
+                    cout << "Login berhasil!\n";
+                    loggedIn = true;
+                } else {
+                    cout << "Login gagal. Nama pengguna atau kata sandi salah.\n";
+                }
+                break;
+            }
+            case 3:
+                cout << "Terima kasih, sampai jumpa!\n";
+                return 0;
+            default:
+                cout << "Pilihan tidak valid.\n";
+        }
+    }
+
+    while (loggedIn) {
+        movieManager.displayMovies();
+        
+        string chosenMovie, chosenSchedule;
+        cout << "Pilih film yang ingin ditonton: ";
+        cin >> chosenMovie;
+        cout << "Pilih jam tayang: ";
+        cin >> chosenSchedule;
+
+        theater.displaySeats();
+        theater.chooseSeat();
+
+        int price = 0;
+        for (const auto& movie : movieManager.movies) {
+            if (movie.title == chosenMovie) {
+                price = movie.price;
+                break;
+            }
+        }
+
+        int numTickets;
+        cout << "Masukkan jumlah tiket yang ingin dipesan: ";
+        cin >> numTickets;
+       int totalPrice = movieManager.calculateTotalPrice(price, numTickets);
+
+
+        string ticketDetails = chosenMovie + " - " + chosenSchedule + " - " + to_string(numTickets) + " - Rp" + to_string(totalPrice);
+        ticketQueue.addToQueue(ticketDetails);
+
+        char option;
+        cout << "Apakah Anda ingin memesan tiket lagi? (y/n): ";
+        cin >> option;
+        if (option == 'n' || option == 'N') {
+            cout << "Terima kasih telah menggunakan layanan kami!\n";
+            loggedIn = false;
+        }
+    }
+
+    ticketQueue.processQueue();
+     
+    return 0;
+}
