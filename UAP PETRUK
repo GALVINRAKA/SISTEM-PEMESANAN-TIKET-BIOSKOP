@@ -6,3 +6,65 @@ Allisya Syakdari (2317051017)
 SISTEM PEMESANAN TIKET BIOSKOP
 
 CODING DISINI!!
+
+//Dikerjakan Oleh Purwati Ayu Utami (2357051007)
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+
+using namespace std;
+
+struct User {
+    string username;
+    string password;
+};
+
+struct Movie {
+    string title;
+    string schedule;
+    int price;
+};
+
+class UserManager {
+private:
+    vector<User> users;
+
+public:
+    void registerUser() {
+        User newUser;
+        cout << "Masukkan nama pengguna: ";
+        cin >> newUser.username;
+        cout << "Masukkan kata sandi: ";
+        cin >> newUser.password;
+        users.push_back(newUser);
+        cout << "Registrasi berhasil!\n";
+    }
+
+    bool loginUser(string username, string password) {
+        for (const auto& user : users) {
+            if (user.username == username && user.password == password) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+class MovieManager {
+public:
+    vector<Movie> movies;
+
+public:
+    void displayMovies() {
+        cout << "Jadwal Film:\n";
+        for (const auto& movie : movies) {
+            cout << movie.title << " - " << movie.schedule << " - Rp" << movie.price << endl;
+        }
+    }
+
+    int calculateTotalPrice(int price, int numTickets) {
+        return price * numTickets;
+    }
+};
