@@ -37,3 +37,102 @@ public:
     }
 };
 
+
+// Di Kerjakan Oleh Galvin Citraka Pandya Nugraha
+
+class MovieManager {
+public:
+    vector<Movie> movies;
+
+public:
+    void displayMovies() {
+        cout << "Jadwal Film:\n";
+        for (const auto& movie : movies) {
+            cout << movie.title << " - " << movie.schedule << " - Rp" << movie.price << endl;
+        }
+    }
+
+    int calculateTotalPrice(int price, int numTickets) {
+        return price * numTickets;
+    }
+};
+
+int main() {
+    UserManager userManager;
+    MovieManager movieManager;
+
+    movieManager.movies.push_back({"Avengers: Endgame", "12:00", 50000});
+    movieManager.movies.push_back({"Spider-Man: Far From Home", "14:30", 45000});
+    movieManager.movies.push_back({"Joker", "18:00", 40000});
+
+    bool loggedIn = false;
+    while (!loggedIn) {
+        cout << "Bioskop TIM 1\nIlmu Komputer\n================\n* DAFTAR MENU *\n================\n1. Registrasi\n2. Login\n3. Keluar\nPilihan: ";
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                userManager.registerUser();
+                break;
+            case 2: {
+                string username, password;
+                cout << "Masukkan nama pengguna: ";
+                cin >> username; 
+                cout << "Masukkan kata sandi: ";
+                cin >> password;
+                if (userManager.loginUser(username, password)) {
+                    cout << "Login berhasil!\n";
+                    loggedIn = true;
+                } else {
+                    cout << "Login gagal. Nama pengguna atau kata sandi salah.\n"; 
+                }
+                break;
+            }
+            case 3:
+                cout << "Terima kasih, sampai jumpa!\n";
+                return 0; 
+            default:
+                cout << "Pilihan tidak valid.\n";
+        }
+    }
+
+    while (loggedIn) {
+        movieManager.displayMovies();
+        
+        string chosenMovie, chosenSchedule;
+        cout << "Pilih film yang ingin ditonton: ";
+        cin >> chosenMovie;
+        cout << "Pilih jam tayang: ";
+        cin >> chosenSchedule;
+
+        int price = 0;
+        for (const auto& movie : movieManager.movies) {
+            if (movie.title == chosenMovie) {
+                price = movie.price;
+                break;
+            }
+        }
+
+        int numTickets;
+        cout << "Masukkan jumlah tiket yang ingin dipesan: ";
+        cin >> numTickets; 
+        int totalPrice = movieManager.calculateTotalPrice(price, numTickets); 
+
+        string ticketDetails = chosenMovie + " - " + chosenSchedule + " - " + to_string(numTickets) + " - Rp" + to_string(totalPrice);
+        ticketQueue.addToQueue(ticketDetails);
+
+        char option;
+        cout << "Apakah Anda ingin memesan tiket lagi? (y/n): ";
+        cin >> option;
+        if (option == 'n' || option == 'N') {
+            cout << "Terima kasih telah menggunakan layanan kami!\n";
+            loggedIn = false;
+        }
+    }
+
+    ticketQueue.processQueue(); 
+
+    return 0; 
+}
+
